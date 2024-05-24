@@ -1,0 +1,15 @@
+Scene
+    -The canvas itself
+
+Objects
+    -Shapes/models | Light | Any Particles
+
+    -Mesh (a visible object)
+        -Combination of:
+            -Geometry
+                -The Shape
+            -Material
+                -How it looks (Color/Texture)
+
+Camera
+    -Point of view

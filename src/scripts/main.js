@@ -2,6 +2,13 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 
+//Test import
+import { CommonComponents } from '../../misc/Scenario';
+console.log(CommonComponents)
+import Car from '../../misc/TestClass';
+const myCar = new Car('Toyota', 'Camry', 2020, 'blue');
+myCar.displayDetails();
+
 const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
