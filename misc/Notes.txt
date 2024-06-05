@@ -1,5 +1,6 @@
 Scene
     -The canvas itself
+    -Where you put all objects
 
 Objects
     -Shapes/models | Light | Any Particles
@@ -13,3 +14,7 @@ Objects
 
 Camera
     -Point of view
+
+Renderer
+    -Handles 
+    the image you are seeing/ renders the objects
