@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    width: 100%;
     margin: 0;
 }
 
@@ -9,17 +10,17 @@ button {
     background-color: transparent;
     border: 1px solid white;
     color: white;
-    transition: box-shadow 0.3s ease-in-out;
+    transition: box-shadow 0.1s ease-in-out;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0);
     cursor: pointer;
     border-radius: 5px;
-    font-size: 10px;
-    top: 10px;
-    right: 10px;
+    font-size: 20px;
+    top: 20px;
+    right: 20px;
 }
 
 button:hover {
-    box-shadow: 0 0 10px yellow;
+    box-shadow: 0 0 20px yellow;
     color: yellow;
     border: 1px solid yellow;
 }
