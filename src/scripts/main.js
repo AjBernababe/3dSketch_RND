@@ -2,20 +2,19 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { CSG } from 'three-csg-ts';
-
+let INTERSECTED
 //Scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
+//Renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+const canvas = renderer.domElement;
+document.body.appendChild(canvas);
+renderer.setAnimationLoop(render);
+
 //Camera
-
-// const fov = 75;
-// const aspect = window.innerWidth / window.innerHeight; // the canvas default
-// const near = 0.1;
-// const far = 1000;
-// const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-// camera.position.z = 3;
-
 const aspectRatio = window.innerWidth / window.innerHeight;
 const frustumSize = 5;
 const camera = new THREE.OrthographicCamera(
@@ -26,94 +25,57 @@ const camera = new THREE.OrthographicCamera(
     0.1,                            // near
     1000                            // far
 );
-
+camera.position.set(0, 0, 100);
 scene.add(camera);
 
-//Renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-const canvas = renderer.domElement;
-document.body.appendChild(canvas);
-
-//Model
-//Geometry
+//Mesh
 const boxWidth = 1;
 const boxHeight = 3;
 const boxDepth = 1;
+// Create geometries
 const outerGeometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 const innerGeometry = new THREE.BoxGeometry(boxWidth - .1, boxHeight, boxDepth - .1);
-
+// Create meshes for bsp
 const outerCube = new THREE.Mesh(outerGeometry);
 const innerCube = new THREE.Mesh(innerGeometry);
-// Make sure the .matrix of each mesh is current
-outerCube.updateMatrix();
-innerCube.updateMatrix();
 // Create a bsp tree from each of the meshes
 const bspA = CSG.fromMesh(outerCube);
 const bspB = CSG.fromMesh(innerCube);
 // Subtract one bsp from the other via .subtract... other supported modes are .union and .intersect
 const bspResult = bspA.subtract(bspB);
-
-//Mesh
 // Get the resulting mesh from the result bsp
 const cube = CSG.toMesh(bspResult, outerCube.matrix);
-
 //Material
 const material = new THREE.MeshBasicMaterial({ color: 0x636363, transparent: true, opacity: 0.9 });
 cube.material = material
-
-//Display Models
+//Add mesh to scene
 scene.add(cube);
-
 //Edges Line
-const edges = new THREE.EdgesGeometry(outerGeometry);
-const edges2 = new THREE.EdgesGeometry(innerGeometry);
-const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
-const line2 = new THREE.LineSegments(edges2, new THREE.LineBasicMaterial({ color: 0xffffff }));
-scene.add(line, line2);
+const meshToLineSegmentsMap = new Map();
+createLineSegmentsForMesh(cube);
+function createLineSegmentsForMesh(mesh) {
+    const edges = new THREE.EdgesGeometry(mesh.geometry);
+    const lineSegments = new THREE.LineSegments(edges);
+    scene.add(lineSegments);
 
-// Create a grid material
-const gridMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
-// Create a grid geometry
-const gridSize = 100; // size of the grid
-const gridDivisions = 100; // number of divisions
-const gridGeometry = new THREE.GridHelper(gridSize, gridDivisions, gridMaterial);
-gridGeometry.position.set(0, -boxHeight / 2, 0); // position the grid at the origin or at the base of the object
-// Add the grid to the scene
-scene.add(gridGeometry);
+    // Store the association between mesh and LineSegments
+    meshToLineSegmentsMap.set(mesh, lineSegments);
+    return lineSegments;
+}
 
 //Controls
-const minDistance = 2;
-const maxDistance = 10;
 const controls = new OrbitControls(camera, canvas);
-controls.target.set(0, 0, 0);
 controls.rotateSpeed = 0.3;
+controls.panSpeed = 0.5;
 controls.update();
 
-function resizeRendererToDisplaySize(renderer) {
-
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const needResize = canvas.width !== width || canvas.height !== height;
-
-    if (needResize) {
-
-        renderer.setSize(width, height, false);
-
-    }
-
-    const minDimension = Math.min(width, height);
-    const maxDimension = Math.max(width, height);
-    const fov = camera.fov * (Math.PI / 180); // Convert fov to radians
-    const aspect = maxDimension / minDimension;
-    const maxVerticalDistance = Math.tan(fov / 2) * maxDistance;
-    const maxHorizontalDistance = maxVerticalDistance * aspect;
-    controls.minDistance = minDistance;
-    controls.maxDistance = maxDistance;
-    controls.minZoom = minDistance / maxVerticalDistance;
-    controls.maxZoom = maxDistance / maxVerticalDistance;
-
-    return needResize;
+//Raycaster
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2(1);
+document.addEventListener('mousemove', onPointerMove);
+function onPointerMove(event) {
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 }
 
 function render() {
@@ -127,10 +89,44 @@ function render() {
 
     }
 
+    raycaster.setFromCamera(pointer, camera);
+    const meshes = scene.children.filter(child => child instanceof THREE.Mesh);
+    const intersects = raycaster.intersectObjects(meshes, false);
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+
+    for (let mesh of meshes) {
+        meshToLineSegmentsMap.get(mesh).material = lineMaterial
+    }
+    document.body.style.cursor = 'move';
+
+    for (let i = 0; i < intersects.length; i++) {
+        meshToLineSegmentsMap.get(intersects[i].object).material.color.set(0xffff00)
+        document.body.style.cursor = 'pointer';
+    }
+
     renderer.render(scene, camera);
 }
 
-renderer.setAnimationLoop(render);
+function resizeRendererToDisplaySize(renderer) {
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+
+    if (needResize) {
+        renderer.setSize(width, height, false);
+    }
+
+    const aspect = window.innerWidth / window.innerHeight;
+
+    camera.left = -frustumSize * aspect / 2;
+    camera.right = frustumSize * aspect / 2;
+    camera.top = frustumSize / 2;
+    camera.bottom = -frustumSize / 2;
+    camera.updateProjectionMatrix();
+
+    return needResize;
+}
 
 // GLTF export function
 function exportGLTF() {
