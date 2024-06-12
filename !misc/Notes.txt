@@ -18,3 +18,7 @@ Camera
 Renderer
     -Handles 
     the image you are seeing/ renders the objects
+
+
+- Raycaster is for handling mesh events with cursor
+- hoverEvents has to be called inside render function because Raycaster updates

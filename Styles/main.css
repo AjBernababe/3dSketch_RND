@@ -8,21 +8,6 @@ body {
     justify-content: center;
 }
 
-svg {
-    position: fixed;
-    pointer-events: none;
-}
-
-path,
-circle {
-    fill: none;
-    stroke: #ffffff;
-    stroke-width: 2px;
-    stroke-linecap: butt;
-    stroke-linejoin: miter;
-    stroke-opacity: 0.5
-}
-
 button {
     position: fixed;
     background-color: transparent;

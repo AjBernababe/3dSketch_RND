@@ -1,0 +1,12 @@
+Menu
+    Export Button
+    Help Button
+    Change/Reset Camera
+    Toggle Crosshair
+    Toggle Gridlines
+    Toggle Show Properties on Hover
+
+On Screen
+    Crosshair
+    Gridlines
+    Hover Properties
