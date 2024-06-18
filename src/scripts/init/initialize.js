@@ -1,35 +1,30 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { hoverEvents } from '../events/hoverEvents';
-
+import { onWindowResize } from '../events/windowResize';
 
 //Three JS Set Up
 export const scene = new THREE.Scene();
 export const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+export const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 export const camera = new THREE.OrthographicCamera();
 export const controls = new OrbitControls(camera, renderer.domElement);
-
 //Cursor event listener
 export const raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 
 export function initialize() {
-    //Scene
-    scene.background = new THREE.Color(0x000000);
-
     //Renderer
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-    renderer.setAnimationLoop(render);
-
-    //Camera
-    camera.position.set(0, 0, 100);
-    scene.add(camera);
 
     //Controls
-    controls.rotateSpeed = 0.3;
-    controls.panSpeed = 0.3;
+    controls.rotateSpeed = 0.5;
+    controls.panSpeed = 0.5;
     controls.minZoom = .5
     controls.maxZoom = 3
+
+    //Lights
+    scene.add(ambientLight);
 
     //Raycaster
     pointer.x = 1
@@ -39,32 +34,17 @@ export function initialize() {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
     });
 
-    //Animate
+
+    renderer.setAnimationLoop(render);
+    //Animate - loops/refreshes canvas
     function render() {
-        handleWindowResizing() //Fixes camera and renderer size on window resizing
+        //Fixes camera and renderer size on window resizing
+        onWindowResize(camera, renderer);
+
+        //Handle object events using cursor
+        raycaster.setFromCamera(pointer, camera);
+        hoverEvents(scene, raycaster) //Event Method
 
         renderer.render(scene, camera);
-
-        //Rescale Camera/Renderer
-        function handleWindowResizing() {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-
-            if (renderer.domElement.width !== width || renderer.domElement.height !== height)
-                renderer.setSize(width, height);
-
-            const frustumSize = 30;
-            const aspect = window.innerWidth / window.innerHeight;
-
-            camera.left = -frustumSize * aspect / 2;
-            camera.right = frustumSize * aspect / 2;
-            camera.top = frustumSize / 2;
-            camera.bottom = -frustumSize / 2;
-            camera.updateProjectionMatrix();
-        }
-
-        //Handle mesh events using cursor
-        raycaster.setFromCamera(pointer, camera);
-        hoverEvents() //Events
     }
 }

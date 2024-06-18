@@ -19,6 +19,10 @@ Renderer
     -Handles 
     the image you are seeing/ renders the objects
 
+Object - 3dModels per component
+Connection - Compiled objects
 
 - Raycaster is for handling mesh events with cursor
 - hoverEvents has to be called inside render function because Raycaster updates
+- In the window resize handler, I did not use the windowResize event listener itself. 
+  Instead, I always compared the window size to the canvas size to avoid potential issues within CEFSharp.

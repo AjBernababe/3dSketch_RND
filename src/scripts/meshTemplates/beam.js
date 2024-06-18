@@ -6,10 +6,10 @@ export function generateMesh(model) {
     let h = model.height
     let w = model.width
     let d = model.depth
-    let x = model.x
+    let x = model.x + 10
     let y = model.y
 
-    const material = new THREE.MeshPhongMaterial({ color: 0xff8fff });
+    const material = new THREE.MeshBasicMaterial({ color: 0x636363, transparent: true, opacity: 0.9 });
 
     switch (model.shape) {
         case 'HSS':

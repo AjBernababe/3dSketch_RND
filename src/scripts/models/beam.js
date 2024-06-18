@@ -1,7 +1,7 @@
 import * as GIZA from "../../../!misc/Scenario"
-import { generateMesh } from '../meshTemplates/primary'
+import { generateMesh } from '../meshTemplates/beam'
 
-export class Primary {
+export class Beam {
     constructor() {
         this.x = 0;
         this.y = 0;

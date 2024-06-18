@@ -15,9 +15,3 @@ export let DoublerModel = { "Grade": "A36", "Thickness": 0.375, "Extension": 5.0
 export let CapPlateModel = { "Grade": "A36", "Thickness": 0.375, "ThicknessDesigned": false, "Guid": "00000000-0000-0000-0000-000000000000", "Fy": 36.0, "Fu": 58.0, "RyS": 0.0, "RtS": 0.0, "ModifiedProperties": [], "ClearCpl": 0.75, "TopTolerance": 0.25 };
 
 export let WasherModel = { "Thickness": 0.375, "ThicknessDesigned": false, "Grade": "A572-50", "Fy": 50.0, "Fu": 65.0, "RyS": 0.0, "RtS": 0.0, "ModifiedProperties": [], "Guids": [] };
-
-export let RI_GussetWhitmoreModel = null;
-
-const IsScenario = true;
-
-export default IsScenario;

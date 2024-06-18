@@ -10,3 +10,6 @@ On Screen
     Crosshair
     Gridlines
     Hover Properties
+
+Turn border on/off
+set opacity

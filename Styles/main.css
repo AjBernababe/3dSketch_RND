@@ -11,8 +11,8 @@ body {
 button {
     position: fixed;
     background-color: transparent;
-    border: 1px solid white;
-    color: white;
+    border: 1px solid black;
+    color: black;
     transition: box-shadow 0.1s ease-in-out;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0);
     cursor: pointer;
@@ -23,7 +23,7 @@ button {
 }
 
 button:hover {
-    box-shadow: 0 0 20px #ffff00;
-    color: yellow;
-    border: 1px solid yellow;
+    box-shadow: 0 0 20px red;
+    color: red;
+    border: 1px solid red;
 }
