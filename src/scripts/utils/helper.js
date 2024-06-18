@@ -35,18 +35,14 @@ export function addToScene(mesh) {
 
     THREE.Group.prototype.size = calculateGroupDimensions(connectionGroup);
 
-    camera.position.set(connectionGroup.size.width / 2, connectionGroup.size.height / 2, connectionGroup.size.depth+connectionGroup.size.height);
+    camera.position.set(connectionGroup.size.width / 2, connectionGroup.size.height / 2, connectionGroup.size.height);
     controls.target.set(connectionGroup.size.width / 2, connectionGroup.size.height / 2, connectionGroup.size.depth / 2);
 
-    const arrowLength = 10;
+    const arrowLength = 1;
     const arrowDirection = new THREE.Vector3();
     camera.getWorldDirection(arrowDirection);
     const arrowHelper = new THREE.ArrowHelper(arrowDirection, camera.position, arrowLength, 0xff0000);
     scene.add(arrowHelper);
-}
-
-export function addBorder(mesh) {
-
 }
 
 export function groupObject(group, mesh) {

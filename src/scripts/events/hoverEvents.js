@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { meshBorderContainer } from '../utils/global';
 
-export function hoverEvents(scene, raycaster) {
+export function onHover(scene, raycaster) {
     const meshes = scene.children.filter(child => child instanceof THREE.Group);
     const intersects = raycaster.intersectObjects(meshes, true);
     const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });

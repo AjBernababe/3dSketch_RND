@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { hoverEvents } from '../events/hoverEvents';
+import { onHover } from '../events/hoverEvents';
 import { onWindowResize } from '../events/windowResize';
 
 //Three JS Set Up
@@ -43,7 +43,7 @@ export function initialize() {
 
         //Handle object events using cursor
         raycaster.setFromCamera(pointer, camera);
-        hoverEvents(scene, raycaster) //Event Method
+        onHover(scene, raycaster) //Event Method
 
         renderer.render(scene, camera);
     }
