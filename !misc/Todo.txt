@@ -1,5 +1,1 @@
-fix grouping(globalGroup => individualGroup => mesh&&border)
-center globalGroup instead of modifying camera and controller
-fix hoverEvents
-    - create map for borders (individualGroup as key && border as value)
-    - change border material/color on individualGroup Hover
+Everything is set. Create models

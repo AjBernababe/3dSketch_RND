@@ -1,19 +1,18 @@
 import * as THREE from 'three'
-import { meshBorderContainer } from '../utils/global';
+import { connectionGroup, wireFrameContainer } from '../utils/global';
 
-export function onHover(scene, raycaster) {
-    const meshes = scene.children.filter(child => child instanceof THREE.Group);
-    const intersects = raycaster.intersectObjects(meshes, true);
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+export function onHover(raycaster) {
+    const meshes = connectionGroup.children.flatMap(child => child.children.filter(obj => obj instanceof THREE.Mesh));
 
-    // for (let mesh of meshes) {
-    //     meshBorderContainer.get(mesh).material = lineMaterial
-    // }
+    const intersects = raycaster.intersectObjects(meshes);
+
+    //Default
     document.body.style.cursor = 'move';
+    wireFrameContainer.forEach(value => value.material.visible = false);
 
-    //If cursor hovers a mesh
+    //If cursor hovers an object
     for (let i = 0; i < intersects.length; i++) {
-        // meshBorderContainer.get(intersects[i].object).material.color.set(0xffff00)
         document.body.style.cursor = 'pointer';
+        wireFrameContainer.get(intersects[0].object).material.visible = true
     }
 }

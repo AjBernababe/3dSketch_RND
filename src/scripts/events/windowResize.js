@@ -1,17 +1,19 @@
 import { connectionGroup } from "../utils/global";
+import { getBoundingBox } from "../utils/helper";
 
 export function onWindowResize(camera, renderer) {
     const canvas = renderer.domElement;
     const width = window.innerWidth;
     const height = window.innerHeight;
+    const connection = getBoundingBox(connectionGroup)
     const needResize = canvas.width !== width || canvas.height !== height
-    const isPortrait = connectionGroup.size.width < connectionGroup.size.height
+    const isPortrait = connection.width < connection.height
     const allowance = 10
 
     if (needResize)
         renderer.setSize(width, height);
 
-    const frustumSize = Math.max(connectionGroup.size.width, connectionGroup.size.height) + allowance;
+    const frustumSize = Math.max(connection.width, connection.height) + allowance;
     const aspect = isPortrait
         ? width / height
         : height / width;

@@ -19,8 +19,9 @@ Renderer
     -Handles 
     the image you are seeing/ renders the objects
 
-Object - 3dModels per component
-Connection - Compiled objects
+Mesh - 3dModels per component
+Connection - Compiled mesh
+Wireframe - Mesh's border
 
 - Raycaster is for handling mesh events with cursor
 - onHover has to be called inside render function because Raycaster updates

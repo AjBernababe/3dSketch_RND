@@ -17,6 +17,9 @@ export function initialize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    //Camera
+    camera.position.set(0, 0, 100);
+
     //Controls
     controls.rotateSpeed = 0.5;
     controls.panSpeed = 0.5;
@@ -41,9 +44,9 @@ export function initialize() {
         //Fixes camera and renderer size on window resizing
         onWindowResize(camera, renderer);
 
-        //Handle object events using cursor
+        //Handle mesh events using cursor
         raycaster.setFromCamera(pointer, camera);
-        onHover(scene, raycaster) //Event Method
+        onHover(raycaster) //Event Method
 
         renderer.render(scene, camera);
     }

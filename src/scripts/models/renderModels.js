@@ -1,13 +1,16 @@
 import { Primary } from './primary'
 import { Beam } from './beam'
-import { addToScene } from '../utils/helper'
+import { addToScene, addChild } from '../utils/helper'
 
 export function renderModels() {
     //DrawPrimary
     const primary = new Primary()
-    addToScene(primary.mesh)
+    addChild(primary.mesh)
 
     //DrawBeam
     const beam = new Beam()
-    addToScene(beam.mesh)
+    addChild(beam.mesh)
+
+    //Add models to scene
+    addToScene()
 }
